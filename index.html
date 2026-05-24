@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MESIN PENGHANCUR KESOMBONGAN</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* 9:16 Aspect Ratio Container */
+        .phone-container {
+            width: 100vw;
+            height: 100vh;
+            max-width: 430px; /* Approximate smartphone width */
+            max-height: 932px; /* Approximate smartphone height */
+            position: relative;
+            background: #0d0d0d;
+            border-left: 4px solid #000000;
+            border-right: 4px solid #000000;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Ambient Halloween Background with Embedded SVG Elements */
+        .background-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.15;
+            pointer-events: none;
+            background-image: 
+                radial-gradient(circle at 50% 80%, rgba(139, 0, 0, 0.3) 0%, transparent 70%),
+                linear-gradient(to bottom, #000 60%, #1a0000 100%);
+        }
+
+        /* Large Sharp Cross/Sword Silhouette Background */
+        .bg-cross {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 260px;
+            height: 400px;
+            opacity: 0.12;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Navigation Menu at the Top */
+        .nav-bar {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 0, 0, 0.85);
+            border-bottom: 2px solid #8b0000;
+            padding: 12px 5px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: 1px solid #333;
+            color: #888;
+            padding: 8px 10px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .nav-btn.active {
+            color: #ff0000;
+            border-color: #ff0000;
+            background: rgba(139, 0, 0, 0.1);
+            text-shadow: 0 0 5px #ff0000;
+            box-shadow: inset 0 0 5px rgba(255, 0, 0, 0.3);
+        }
+
+        /* Main Slider Wrapper */
+        .slider-wrapper {
+            flex: 1;
+            display: flex;
+            width: 300%; /* 3 slides horizontally */
+            height: 100%;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 5;
+        }
+
+        /* Base Slide Layout */
+        .slide {
+            width: 33.3333%;
+            height: 100%;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+            position: relative;
+            scrollbar-width: none; /* Hide scrollbars */
+        }
+        .slide::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Typography & Custom Horror Elements */
+        .horror-title {
+            color: #ff0000;
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
+            font-weight: 900;
+            border-bottom: 1px double #ff0000;
+            padding-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .flag-accent {
+            color: #ffffff;
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .horror-text {
+            color: #cccccc;
+            font-size: 12px;
+            line-height: 1.8;
+            text-align: justify;
+            margin-bottom: 20px;
+            border-left: 2px solid #8b0000;
+            padding-left: 10px;
+        }
+
+        /* Slide 2: Floating/Hologram Image Containers */
+        .photo-row {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 320px;
+            margin-bottom: 25px;
+            gap: 15px;
+        }
+
+        .hologram-box {
+            flex: 1;
+            aspect-ratio: 3/4;
+            background: #111;
+            border: 2px solid #333;
+            position: relative;
+            overflow: hidden;
+            animation: floatAnim 4s ease-in-out infinite alternate;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+        }
+
+        .hologram-box:nth-child(2) {
+            animation-delay: 2s; /* Alternating float effect */
+        }
+
+        /* Combined Hologram Glitch and Scanline Overlays */
+        .hologram-box::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 255, 0.02));
+            background-size: 100% 4px, 6px 100%;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        /* Render placeholders for images cleanly as requested */
+        .hologram-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(120%) brightness(90%);
+            mix-blend-mode: lighten;
+            opacity: 0.85;
+        }
+
+        @keyframes floatAnim {
+            0% { transform: translateY(0px); box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+            100% { transform: translateY(-12px); box-shadow: 0 20px 25px rgba(255,0,0,0.15); }
+        }
+
+        /* Profile Details Style */
+        .profile-details {
+            width: 100%;
+            max-width: 320px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #222;
+            padding: 15px;
+            border-top: 2px solid #ff0000;
+        }
+
+        .detail-item {
+            font-size: 12px;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .detail-item span {
+            color: #ff0000;
+            font-weight: bold;
+        }
+
+        .bio-text {
+            font-size: 11px;
+            color: #888;
+            line-height: 1.5;
+            margin-top: 12px;
+            border-top: 1px dashed #333;
+            padding-top: 8px;
+            text-align: center;
+        }
+
+        /* Slide 3: Holographic Media Buttons */
+        .links-container {
+            width: 100%;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .social-card {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #0d0d0d 0%, #141414 100%);
+            border: 1px solid #222;
+            border-left: 4px solid #ff0000;
+            padding: 15px;
+            text-decoration: none;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+        }
+
+        .social-card:hover {
+            border-color: #ff0000;
+            background: #1a0000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+            transform: scale(1.02);
+        }
+
+        .social-icon {
+            width: 35px;
+            height: 35px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            fill: #ffffff;
+            filter: drop-shadow(0 0 2px rgba(255,255,255,0.5));
+        }
+
+        .social-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .social-name {
+            font-size: 14px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .social-action {
+            font-size: 9px;
+            color: #ff0000;
+            margin-top: 3px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Skull Accent Decorator */
+        .skull-mark {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 20px;
+            color: #333;
+            text-shadow: 0 0 5px rgba(0,0,0,0.8);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-container">
+        <!-- Ambient Atmospheric Background Components -->
+        <div class="background-overlay"></div>
+        
+        <!-- Cross / Blade SVG Background Shape -->
+        <svg class="bg-cross" viewBox="0 0 100 150">
+            <path d="M 45 10 L 55 10 L 55 45 L 85 45 L 85 55 L 55 55 L 55 130 L 50 148 L 45 130 Z" fill="#8b0000"/>
+        </svg>
+
+        <!-- Navigation Tabs Interface -->
+        <div class="nav-bar">
+            <button class="nav-btn active" onclick="switchSlide(0)" id="btn-0">Duck Porte</button>
+            <button class="nav-btn" onclick="switchSlide(1)" id="btn-1">Lil Porte</button>
+            <button class="nav-btn" onclick="switchSlide(2)" id="btn-2">Last Porte</button>
+        </div>
+
+        <!-- Horizontal Sliders Structure -->
+        <div class="slider-wrapper" id="mainSlider">
+            
+            <!-- SLIDE 1: DUCK PORTE (Words/Philosophy) -->
+            <div class="slide">
+                <h1 class="horror-title">WELCOME TO<br>MESIN PENGHANCUR KESOMBONGAN</h1>
+                
+                <div class="flag-accent">GW PUTTRA 🇩🇰</div>
+                
+                <p class="horror-text">
+                    dan gw org yg paling tidak suka dengan ke semena semenaan ya itu menindas org lemah, menindas org yg miskin / terpuruk hanya karna kau lebih kaya ataupun lebih berkuasa
+                </p>
+                
+                <p class="horror-text" style="border-left-color: #ffffff;">
+                    dan satu lagi jika kamu hanya bisa menyombongkan skill temen / orang lain maka jangan pernah meninggi di depanku karna gw bisa lebih dri apa yga kau sebutin.
+                </p>
+                <div class="skull-mark">☠</div>
+            </div>
+
+            <!-- SLIDE 2: LIL PORTE (Photos & Profile Data) -->
+            <div class="slide">
+                <h1 class="horror-title">LIL PORTE</h1>
+                
+                <!-- Floating Left & Right Image Slots using Base64 elements or fallback styling -->
+                <div class="photo-row">
+                    <div class="hologram-box">
+                        <!-- Left Image placeholder filled with custom inline styling or source -->
+                        <div style="width:100%; height:100%; background:#222 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="45" r="20" fill="%23444"/><path d="M20 90 C20 70, 80 70, 80 90" fill="%23444"/></svg>') center/cover no-repeat; opacity:0.6; filter: sepia(1) hue-rotate(320deg) saturate(3);"></div>
+                    </div>
+                    <div class="hologram-box">
+                        <!-- Right Image placeholder matching the theme style perfectly -->
+                        <div style="width:100%; height:100%; background:#222 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="45" r="20" fill="%23444"/><path d="M20 90 C20 70, 80 70, 80 90" fill="%23444"/></svg>') center/cover no-repeat; opacity:0.6; filter: sepia(1) hue-rotate(320deg) saturate(3);"></div>
+                    </div>
+                </div>
+
+                <!-- Profile Meta-data Table Component -->
+                <div class="profile-details">
+                    <div class="detail-item">NAME : <span>puttra yourfav</span></div>
+                    <div class="detail-item">AGE : <span>20</span></div>
+                    <div class="detail-item">FROM : <span>made in indonesian</span></div>
+                    
+                    <p class="bio-text">
+                        gw programer pemula dan gw hanya berusaha semaksimal mungkin untuk berkembang ☠️
+                    </p>
+                </div>
+            </div>
+
+            <!-- SLIDE 3: LAST PORTE (Social Connections Hub) -->
+            <div class="slide">
+                <h1 class="horror-title">LAST PORTE</h1>
+                
+                <div class="links-container">
+                    <!-- WhatsApp Element Link Grid Card -->
+                    <a href="https://chat.whatsapp.com/DjrfX7WNaJ7F6UXRdzpJIw?s=cl&p=a&mlu=0" target="_blank" class="social-card">
+                        <div class="social-icon">
+                            <svg viewBox="0 0 24 24" width="100%" height="100%">
+                                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.963C16.528 1.981 14.062.96 11.435.96c-5.434 0-9.858 4.371-9.863 9.8a9.716 9.716 0 0 0 1.492 5.148l-1.004 3.665 3.758-.974zm13.007-4.27c-.22-.11-1.299-.64-1.501-.713-.203-.075-.35-.112-.497.11-.147.222-.57.713-.699.86-.128.147-.257.166-.477.056-.22-.11-.927-.341-1.764-1.085-.651-.58-1.09-1.297-1.218-1.518-.128-.22-.014-.339.096-.449.1-.1.22-.256.33-.384.11-.127.147-.218.22-.365.074-.147.037-.275-.018-.385-.056-.11-.497-1.197-.681-1.642-.179-.434-.361-.375-.497-.382-.128-.006-.275-.008-.422-.008s-.385.056-.587.275c-.203.222-.773.755-.773 1.84s.794 2.133.905 2.282c.11.147 1.562 2.385 3.785 3.345 2.223.96 2.223.64 2.628.604.406-.036 1.3-.532 1.484-1.046.184-.513.184-.953.13-1.046-.056-.093-.203-.147-.423-.258z"/>
+                            </svg>
+                        </div>
+                        <div class="social-info">
+                            <span class="social-name">WhatsApp Group</span>
+                            <span class="social-action">Klik untuk bergabung grup</span>
+                        </div>
+                    </a>
+
+                    <!-- Telegram Element Link Grid Card -->
+                    <a href="https://t.me/zienntrezz" target="_blank" class="social-card" style="border-left-color: #0088cc;">
+                        <div class="social-icon">
+                            <svg viewBox="0 0 24 24" width="100%" height="100%">
+                                <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.231-.702.064-1.233-.464-1.913-.91-1.064-.7-1.666-1.135-2.698-1.814-1.193-.785-.419-1.216.26-1.922.178-.184 3.273-2.999 3.333-3.254.007-.03-.004-.143-.072-.203-.067-.06-.166-.039-.237-.023-.102.023-1.722 1.096-4.863 3.222-.46.316-.877.472-1.249.464-.41-.008-1.198-.231-1.785-.422-.72-.234-1.293-.358-1.243-.756.026-.207.312-.421.858-.64 3.354-1.46 5.589-2.422 6.705-2.887 3.19-1.324 3.852-1.554 4.284-1.562.095-.002.308.021.446.133.117.096.149.225.156.324.007.093.001.262-.016.429z"/>
+                            </svg>
+                        </div>
+                        <div class="social-info">
+                            <span class="social-name">Telegram</span>
+                            <span class="social-action">Hubungi via Telegram</span>
+                        </div>
+                    </a>
+
+                    <!-- TikTok Element Link Grid Card -->
+                    <a href="https://www.tiktok.com/@gw.puttra.bray?_r=1&_t=ZS-96dNRGTfqUh" target="_blank" class="social-card" style="border-left-color: #ffffff;">
+                        <div class="social-icon">
+                            <svg viewBox="0 0 24 24" width="100%" height="100%">
+                                <path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.52-4.06-1.39v7.3c-.03 2.44-1.26 4.8-3.4 5.93-2.14 1.13-4.85.95-6.84-.44-1.99-1.4-3-3.87-2.52-6.31.48-2.44 2.54-4.32 5.01-4.55.1-.01.2 0 .3 0v4.03c-.11.02-.21.03-.32.06-1.07.25-1.93 1.17-2.03 2.27-.11 1.22.69 2.39 1.83 2.73 1.14.34 2.42-.23 2.83-1.35.06-.18.08-.37.08-.57V.02z"/>
+                            </svg>
+                        </div>
+                        <div class="social-info">
+                            <span class="social-name">TikTok</span>
+                            <span class="social-action">Kunjungi profil TikTok</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="skull-mark">☠</div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Controls Execution Logic Script -->
+    <script>
+        function switchSlide(index) {
+            // Apply horizontal transform movement logic
+            const slider = document.getElementById('mainSlider');
+            slider.style.transform = `translateX(-${index * 33.3333}%)`;
+            
+            // Clean active classes configuration from tabs
+            for (let i = 0; i < 3; i++) {
+                document.getElementById(`btn-${i}`).classList.remove('active');
+            }
+            
+            // Active current triggered tab element
+            document.getElementById(`btn-${index}`).classList.add('active');
+        }
+    </script>
+</body>
+</html>
